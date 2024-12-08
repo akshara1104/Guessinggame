@@ -1,33 +1,28 @@
 #!/bin/bash
-function guessinggame {
 
-    num=$(find | wc -l)       
-    echo "Welcome to Guessinggame!"
-    echo "Please enter how many files there are in the current directory."
-    read response
-    echo "You entered: $response"
-
-    while true
-    do
-        if [[ $(echo $response | egrep -q "^[0-9]+$"; echo $?) -ne 0 ]];
-        then
-             echo "Must be a number. Please guess again."
-        elif [[ $response -lt $num ]]
-        then 
-              echo "This is too low. Please guess again."
-        elif [[ $response -gt $num ]]
-        then
-             echo "This is too high. Please guess again."
+function play_guessing_game {
+    file_count=$(find . -type f | wc -l)
+    
+    echo "Welcome to the Guessing Game!"
+    echo "Try to guess how many files are in the current directory."
+    
+    while true; do
+        read -p "Enter your guess: " user_guess
+        
+        if ! [[ "$user_guess" =~ ^[0-9]+$ ]]; then
+            echo "Invalid input. Please enter a valid number."
+            continue
+        fi
+        
+        if [[ $user_guess -lt $file_count ]]; then
+            echo "Too low. Try again!"
+        elif [[ $user_guess -gt $file_count ]]; then
+            echo "Too high. Try again!"
         else
-            echo "Congratulations! You guessed it."
+            echo "Congratulations! You guessed it right."
             break
         fi
-
-        read response
-        echo "You entered: $response"
     done
-
-
 }
 
-guessinggame
+play_guessing_game
